@@ -76,4 +76,34 @@ console.log(id);
   });
 });
 
+router.put('/:id', function (req, res) {
+  console.log("i work");
+  var id = req.params.id;
+console.log(id);
+  pg.connect(connectionString, function (err, client, done) {
+    console.log("connect");
+    if (err) {
+      res.sendStatus(500);
+    }
+
+    client.query('UPDATE tasks SET completed_date = now() ' +
+                  'WHERE id = $1',
+                  [id],
+                  function (err, result) {
+                    console.log('result', result);
+                    done();
+
+                    if (err) {
+                      console.log("err", err);
+
+                      res.sendStatus(500);
+                      return;
+                    }
+
+                    res.sendStatus(200);
+                  }
+                )
+  });
+});
+
 module.exports = router

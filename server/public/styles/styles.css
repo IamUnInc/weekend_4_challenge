@@ -5,6 +5,14 @@
   padding: 3px;
 }
 
+#otherTodo{
+  background-color: red;
+  border: 1px solid black;
+  display: inline-block;
+  margin: 3px;
+  padding: 3px;
+}
+
 .complete{
   display: inline-block;
 }

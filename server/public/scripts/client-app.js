@@ -3,7 +3,7 @@ $(document).ready(function () {
   getTasks();
 $('#form-submit').on('click', postTask);
 $('#task-list').on('click', '.delete', deleteTask);
-
+$('#task-list').on('click', '.complete', completeTask);
 });
 
 function postTask() {
@@ -37,7 +37,11 @@ function getTasks() {
       console.log('GET /todo returns:', tasks);
       // appendTasks(tasks);
       tasks.forEach(function (task) {
+        if(task.completed_date == null){
         var $el = $('<div id="thingTodo"></div>');
+      }else{
+        var $el = $('<div id="otherTodo"><div>');
+      }
         $el.append(task.task_content);
         $el.data('taskId', task.id);
         $el.append('<button class="complete">Complete</button>');
@@ -68,7 +72,26 @@ function deleteTask() {
         getTasks();
       },
       error: function () {
-        console.log('DELETE faliled');
+        console.log('DELETE failed');
+      }
+    });
+}
+
+function completeTask() {
+  event.preventDefault();
+  console.log('click');
+    var taskId = $(this).parent().data('taskId');
+    console.log(taskId);
+    $.ajax({
+      type: 'PUT',
+      url: '/todo/' + taskId,
+      success: function () {
+        console.log('PUT success');
+        $('#task-list').empty();
+        getTasks();
+      },
+      error: function () {
+        console.log('PUT failed');
       }
     });
 }
